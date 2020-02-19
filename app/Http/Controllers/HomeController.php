@@ -74,6 +74,7 @@ class HomeController extends Controller
         $columns = [
             'id',
             'title',
+            // ここに投稿の作者を置きたい
         ];
         $current_page = ($per_page === 0) ? 1 : $start / $per_page + 1;
         return $query->paginate($per_page, $columns, '', $current_page);
