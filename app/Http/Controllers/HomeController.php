@@ -39,9 +39,7 @@ class HomeController extends Controller
 
     public function ajax(Request $request) {
 
-        // $query = Post::with('user');
         $query = Post::query();
-        // dd($query->get());
 
         // 検索
         if($request->filled('search.value')) {
@@ -53,7 +51,7 @@ class HomeController extends Controller
 
             foreach($keywords as $keyword) {
 
-                $query->where('posts.title', 'LIKE', '%'. $keyword .'%');
+                $query->where('title', 'LIKE', '%'. $keyword .'%');
 
             }
 
@@ -74,11 +72,10 @@ class HomeController extends Controller
         $columns = [
             'id',
             'title',
-            // ここに投稿の作者を置きたい
+            'created_at'
         ];
         $current_page = ($per_page === 0) ? 1 : $start / $per_page + 1;
         return $query->paginate($per_page, $columns, '', $current_page);
-        // return $query->get();
 
     }
 }

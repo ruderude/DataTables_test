@@ -52,7 +52,11 @@
                 },
                 {
                     data: 'title',
-                    title: '名前'
+                    title: 'タイトル'
+                },
+                {
+                    data: 'created_at',
+                    title: '投稿日'
                 },
             ],
             order: [[ 0, 'asc' ]],   // 並べ替え項目を指定,
