@@ -17,6 +17,10 @@
                 </div>
                 <div class="container-fluid" style="margin-top: -0.5rem">
                     <div class="row">
+                        <div class="col-3 font-weight-bold">ID</div>
+                        <div class="col-9 font-weight-bold">{{ $user->id }}</div>
+                    </div>
+                    <div class="row">
                         <div class="col-3 font-weight-bold">名前</div>
                         <div class="col-9 font-weight-bold">{{ $user->name }}</div>
                     </div>

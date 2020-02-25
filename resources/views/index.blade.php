@@ -26,9 +26,9 @@
                                     <td id="">{{ $user->id }}</td>
                                     <td id="">
                                         @if($user->image)
-                                        <img class="mini-image-circle" src="/storage/img/{{$user->image}}" alt="トップ画像">
+                                        <a href="/users/{{$user->id}}"><img class="mini-image-circle" src="/storage/img/{{$user->image}}" alt="トップ画像"></a>
                                         @else
-                                        <img class="mini-image-circle" src="/storage/images/noimage.jpeg" alt="トップ画像">
+                                        <a href="/users/{{$user->id}}"><img class="mini-image-circle" src="/storage/images/noimage.jpeg" alt="トップ画像"></a>
                                         @endif
                                     </td>
                                     <td><a href="/users/{{$user->id}}">{{ $user->name }}</a></td>
@@ -62,10 +62,10 @@ jQuery(function($){
     });
 
     $('#table1').DataTable({
-        columnDefs: [
-            // 1列目を消す(visibleをfalseにすると消えます)
-            { targets: 0, visible: false },
-        ]
+        // columnDefs: [
+        //     // 1列目を消す(visibleをfalseにすると消えます)
+        //     { targets: 0, visible: false },
+        // ]
     });
 });
 </script>
