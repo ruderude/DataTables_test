@@ -88,38 +88,35 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // dd($request->file('image'));
-        $imageName = "";
-        if($request->image) {
-            $id = $id;
+        // dd($request->image);
+        $imageName = null;
+        $image = $request->image;
+        if($image) {
+            // dd($id);
             $now = date("Ymd");
             $num = mt_rand();
-            $end = $request->image->getClientOriginalExtension();
+            $end = $image->getClientOriginalExtension();
             $imageName = $id . $now . $num . "." . $end;
             // dd($imageName);
-            $request->image->storeAs('public/img/', $imageName);
+            $image->storeAs('public/img/', $imageName);
         }
         // dd($imageName);
 
-        // 元のファイルを削除
-        $oldImageName = "";
-        // dd($request->all());
-        // dd($request->file('image'));
-        $user = $this->repository->show($id);
-        // 元のファイル名
-        $oldImageName = $user->image;
+        // 元のファイルがあれば削除
+        $oldImageName = null;
 
+        $user = $this->repository->show($id);
         $user->name = $request->name;
         $user->sex = $request->sex;
         $user->age = $request->age;
         $user->job = $request->job;
-        $user->image = $imageName;
-        $user->name = $request->name;
-        $user->save();
-
-        if(!is_null($oldImageName) && !is_null($request->image)) {
+        if(!is_null($imageName)) {
+            $oldImageName = $user->image;
+            $user->image = $imageName;
             Storage::delete('public/img/' . $oldImageName);
         }
+        $user->name = $request->name;
+        $user->save();
 
         return redirect('users/'.$user->id);
     }
