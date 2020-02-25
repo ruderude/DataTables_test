@@ -25,7 +25,11 @@
                                 <tr>
                                     <td id="">{{ $user->id }}</td>
                                     <td id="">
+                                        @if($user->image)
+                                        <img class="mini-image-circle" src="/storage/img/{{$user->image}}" alt="トップ画像">
+                                        @else
                                         <img class="mini-image-circle" src="/storage/images/noimage.jpeg" alt="トップ画像">
+                                        @endif
                                     </td>
                                     <td><a href="/users/{{$user->id}}">{{ $user->name }}</a></td>
                                     <td>

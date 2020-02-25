@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Repositories\UserRepository;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -86,14 +88,39 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // dd($request);
+        // dd($request->file('image'));
+        $imageName = "";
+        if($request->image) {
+            $id = $id;
+            $now = date("Ymd");
+            $num = mt_rand();
+            $end = $request->image->getClientOriginalExtension();
+            $imageName = $id . $now . $num . "." . $end;
+            // dd($imageName);
+            $request->image->storeAs('public/img/', $imageName);
+        }
+        // dd($imageName);
+
+        // 元のファイルを削除
+        $oldImageName = "";
+        // dd($request->all());
+        // dd($request->file('image'));
         $user = $this->repository->show($id);
+        // 元のファイル名
+        $oldImageName = $user->image;
+
         $user->name = $request->name;
         $user->sex = $request->sex;
         $user->age = $request->age;
         $user->job = $request->job;
+        $user->image = $imageName;
         $user->name = $request->name;
         $user->save();
+
+        if(!is_null($oldImageName) && !is_null($request->image)) {
+            Storage::delete('public/img/' . $oldImageName);
+        }
+
         return redirect('users/'.$user->id);
     }
 

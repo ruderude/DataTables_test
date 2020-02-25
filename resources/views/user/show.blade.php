@@ -8,7 +8,11 @@
                 <div class="card-header">ユーザーページ<button class="btn btn-primary float-right" data-toggle="modal" data-target="#userModal">編集する</button></div>
                 <div class="card-body">
                     <div class="up ml-5">
+                        @if($user->image)
+                        <img class="image-circle-men" src="/storage/img/{{$user->image}}" alt="トップ画像">
+                        @else
                         <img class="image-circle-men" src="/storage/images/noimage.jpeg" alt="トップ画像">
+                        @endif
                     </div>
                 </div>
                 <div class="container-fluid" style="margin-top: -0.5rem">
@@ -136,9 +140,10 @@
                     </div>
                     <div class="mb-2">トップ画像</div>
                     <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="customFile">
+                        <input name="image" type="file" class="custom-file-input" id="customFile">
                         <label class="custom-file-label" for="customFile" data-browse="参照">ファイル選択...</label>
                     </div>
+                    <small class="input_condidion">*jpg,png,gif形式のみ</small></br>
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">閉じる</button>
