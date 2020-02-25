@@ -15,10 +15,10 @@
 //     return view('welcome');
 // });
 
-Route::get('/datatable', 'HomeController@index')->name('home');
-Route::get('/datatable/ajax', 'HomeController@ajax')->name('datatable');
+Route::get('/', 'UserController@index')->name('home');
+// Route::get('/users', 'UserController@index')->name('users.index');
 
-// Route::resource('users', 'UserController');
+Route::resource('/users', 'UserController', ['only' => ['index', 'show', 'edit', 'update', 'destroy']]);
 
 Auth::routes();
 

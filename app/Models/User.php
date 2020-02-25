@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -23,7 +23,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name','sex','age','job','image', 'email', 'password',
     ];
 
     /**
@@ -52,6 +52,6 @@ class User extends Authenticatable
     public function posts() // 複数形
     {
         // 記事を新しい順で取得する
-        return $this->hasMany('App\Post')->latest();
+        return $this->hasMany('App\Models\Post')->latest();
     }
 }

@@ -1,0 +1,58 @@
+.myButton {
+	box-shadow: 3px 4px 0px 0px #8a2a21;
+	background:linear-gradient(to bottom, #c62d1f 5%, #f24437 100%);
+	background-color:#c62d1f;
+	border-radius:18px;
+	border:1px solid #d02718;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:14px;
+	padding:3px 15px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #810e05;
+}
+.myButton:hover {
+  color: #ffffff;
+  text-decoration: none;
+	background:linear-gradient(to bottom, #f24437 5%, #c62d1f 100%);
+	background-color:#f24437;
+}
+.myButton:active {
+  position:relative;
+  color: #ffffff;
+  text-decoration: none;
+	top:1px;
+}
+
+/* 一覧のアイコン */
+.mini-image-circle {
+	width:30px;
+	height:30px;
+	object-fit:cover;
+	border-radius:50%;
+	border: 1px solid #fff;
+}
+
+/* ユーザーページ、トップ画像 */
+.image-circle-men {
+	width:200px;
+	height:200px;
+	object-fit:cover;
+	border-radius:50%;
+	border: 9px solid #3345ff;
+	/* padding: 5px; */
+}
+
+.up {
+	margin-top: -2.8rem;
+}
+
+/* ユーザーフォーム */
+.custom-file {
+  overflow: hidden;
+}
+.custom-file-label {
+  white-space: nowrap;
+}

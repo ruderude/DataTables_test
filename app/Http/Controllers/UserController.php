@@ -3,9 +3,22 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Repositories\UserRepository;
 
 class UserController extends Controller
 {
+
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct(UserRepository $repository)
+    {
+        $this->middleware('auth');
+        $this->repository = $repository;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -13,7 +26,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        $users = $this->repository->index();
+        return view('index', ['users' => $users]);
     }
 
     /**
@@ -45,7 +59,11 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
+        // dd($id);
+        $user = $this->repository->show($id);
+        $posts = $this->repository->userPosts($id);
+        // dd($posts);
+        return view('user.show', ['user' => $user, 'posts' => $posts]);
     }
 
     /**
@@ -68,7 +86,15 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // dd($request);
+        $user = $this->repository->show($id);
+        $user->name = $request->name;
+        $user->sex = $request->sex;
+        $user->age = $request->age;
+        $user->job = $request->job;
+        $user->name = $request->name;
+        $user->save();
+        return redirect('users/'.$user->id);
     }
 
     /**

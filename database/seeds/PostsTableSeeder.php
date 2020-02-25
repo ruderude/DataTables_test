@@ -15,7 +15,7 @@ class PostsTableSeeder extends Seeder
         $faker = Faker\Factory::create('ja_JP');
 
         // ランダムに記事を作成
-        for ($i = 0; $i < 30; $i++)
+        for ($i = 0; $i < 300; $i++)
         {
             DB::table('posts')->insert([
                 'user_id' => $faker->numberBetween(1, 20),

@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\User;
-use App\Post;
 
 class HomeController extends Controller
 {
+
+    private $repository;
+
     /**
      * Create a new controller instance.
      *
@@ -16,6 +17,7 @@ class HomeController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        // $this->repository = $repository;
     }
 
     /**
@@ -25,57 +27,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        // $query = User::query();
-        // $query->where('name', '訓志');
-        // $users = $query->get();
-        // dd($users);
-        // $posts = Post::with('user')->get();
-        // dd($posts);
-        // $data = json_encode($posts);
-        // return $data;
-        // return view('index', ['posts' => $posts]);
-        return view('index');
-    }
-
-    public function ajax(Request $request) {
-
-        $query = Post::query();
-
-        // 検索
-        if($request->filled('search.value')) {
-
-            $search_value = trim(
-                mb_convert_kana($request->input('search.value'), 's')
-            );
-            $keywords = explode(' ', $search_value);
-
-            foreach($keywords as $keyword) {
-
-                $query->where('title', 'LIKE', '%'. $keyword .'%');
-
-            }
-
-        }
-
-        // ソート
-        if($request->filled('order.0.column')) {
-
-            $order_column_index = $request->input('order.0.column');
-            $order_column = $request->input('columns.'. $order_column_index .'.data');
-            $order_direction = $request->input('order.0.dir');
-            $query->orderBy($order_column, $order_direction);
-
-        }
-
-        $start = intval($request->start);
-        $per_page = intval($request->length);
-        $columns = [
-            'id',
-            'title',
-            'created_at'
-        ];
-        $current_page = ($per_page === 0) ? 1 : $start / $per_page + 1;
-        return $query->paginate($per_page, $columns, '', $current_page);
 
     }
+
 }
