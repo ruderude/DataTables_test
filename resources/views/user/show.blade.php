@@ -5,7 +5,11 @@
     <div class="row justify-content-center">
         <div class="col-md-10">
             <div class="card">
-                <div class="card-header">ユーザーページ<button class="btn btn-primary float-right" data-toggle="modal" data-target="#userModal">編集する</button></div>
+                <div class="card-header">ユーザーページ
+                    @if(Auth::id() === $user->id)
+                    <button class="btn btn-primary float-right" data-toggle="modal" data-target="#userModal">編集する</button>
+                    @endif
+                </div>
                 <div class="card-body">
                     <div class="up ml-5">
                         @if($user->image)
