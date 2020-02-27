@@ -19,6 +19,7 @@ Route::get('/', 'UserController@index')->name('home');
 // Route::get('/users', 'UserController@index')->name('users.index');
 
 Route::resource('/users', 'UserController', ['only' => ['index', 'show', 'edit', 'update', 'destroy']]);
+Route::resource('/posts', 'PostController', ['only' => ['index', 'store', 'edit', 'update', 'destroy']]);
 
 Auth::routes();
 

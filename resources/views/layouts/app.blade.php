@@ -40,7 +40,7 @@
                     {{ config('app.name', 'Laravel') }}
                 </a>
                 @auth
-                <a href="#" class="myButton">投稿する</a>
+                <a href="/posts" class="myButton">投稿する</a>
                 @endauth
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
@@ -93,6 +93,41 @@
         <main class="py-4">
             @yield('content')
         </main>
+
+        <!-- Footer -->
+        <footer class="page-footer font-small mdb-color darken-3 pt-4 pb-5">
+
+        <!-- Footer Elements -->
+        <div class="container">
+
+        <!--Grid row-->
+        <div class="row d-flex justify-content-center">
+
+            <!--Grid column-->
+            <div class="col-md-6">
+
+            <!-- Video -->
+            <!-- <div class="embed-responsive embed-responsive-16by9 mb-4">
+                <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/rGn0H-bD_fQ" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div> -->
+
+            </div>
+            <!--Grid column-->
+
+        </div>
+        <!--Grid row-->
+
+        </div>
+        <!-- Footer Elements -->
+
+        <!-- Copyright -->
+        <div class="footer-copyright text-center py-3">© 2020 Copyright:
+        <a href="/"> 訓志ファクトリー.com</a>
+        </div>
+        <!-- Copyright -->
+
+        </footer>
+        <!-- Footer -->
     </div>
 
     @yield('script')

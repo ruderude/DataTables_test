@@ -2,10 +2,31 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use App\Models\Post;
 use Illuminate\Http\Request;
+use App\Http\Repositories\PostRepository;
+use App\Http\Services\PostService;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\PostRequest;
 
 class PostController extends Controller
 {
+    private $services;
+    private $repository;
+
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct(PostService $services ,PostRepository $repository)
+    {
+        $this->middleware('auth');
+        $this->services = $services;
+        $this->repository = $repository;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -13,7 +34,9 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
+        $user = Auth::user();
+        // dd($user);
+        return view('post.create', ['user' => $user]);
     }
 
     /**
@@ -32,9 +55,13 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PostRequest $request)
     {
-        //
+
+        $id = Auth::id();
+        $post = $this->repository->store($request, $id);
+
+        return redirect('/users/'.$id);
     }
 
     /**

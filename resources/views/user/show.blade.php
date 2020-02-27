@@ -76,13 +76,15 @@
                     </div>
                 </div>
                 <div class="mt-3">
-                    <div class="alert alert-primary"><strong>記事一覧</strong> - 要チェック！</div>
+                    <div class="alert alert-primary"><strong>記事一覧</strong> - 要チェック！
+                        <a href="/posts" class="myButton float-right" style="margin-top: -6px">投稿する</a>
+                    </div>
                 </div>
                 @foreach($posts as $key => $post)
                     <div class="card-body">
                         <h5 class="card-title">{{ $post->title }}</h5>
                         <h6 class="card-subtitle mb-2 text-muted">{{ $post->created_at }}</h6>
-                        <p class="card-text">{{ $post->body }}</p>
+                        <p class="card-text">{!! nl2br(e($post->body)) !!}</p>
                     </div>
                 @endforeach
                 <div class="d-flex justify-content-center">
@@ -131,6 +133,7 @@
                             <input class="form-check-input" type="radio" name="sex" id="radio3" value="女性" <?php if($user->sex === "女性") echo "checked"; ?>>
                             <label for="radio3" class="form-check-label">女性</label>
                         </div>
+                        <div id="sex_error"></div>
                     </div>
                     <div class="form-group">
                         <label for="age">年齢</label>
@@ -185,6 +188,7 @@
                         <input type="submit" name="submit" class="btn btn-success" value="変更を保存">
                     </div>
                 </div>
+            </form>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
@@ -224,7 +228,7 @@ jQuery(document).ready(function() {
 <script type="text/javascript" src="{{ asset('js/jobImage.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.7.1/js/lightbox.min.js" type="text/javascript"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.min.js"></script>
-<script type='text/javascript' src="/js/jquery.validate.handler.js"></script>
+<script type='text/javascript' src="/js/user.validate.handler.js"></script>
 
 <style type="text/css">
 form.cmxform label.error, label.error {
