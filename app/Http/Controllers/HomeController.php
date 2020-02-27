@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Repositories\UserRepository;
 
 class HomeController extends Controller
 {
@@ -14,10 +15,10 @@ class HomeController extends Controller
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(UserRepository $repository)
     {
-        $this->middleware('auth');
-        // $this->repository = $repository;
+        // $this->middleware('auth');
+        $this->repository = $repository;
     }
 
     /**
@@ -27,7 +28,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-
+        $users = $this->repository->index();
+        return view('index', ['users' => $users]);
     }
 
 }

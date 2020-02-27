@@ -15,7 +15,7 @@
 //     return view('welcome');
 // });
 
-Route::get('/', 'UserController@index')->name('home');
+Route::get('/', 'HomeController@index')->name('home');
 // Route::get('/users', 'UserController@index')->name('users.index');
 
 Route::resource('/users', 'UserController', ['only' => ['index', 'show', 'edit', 'update', 'destroy']]);
