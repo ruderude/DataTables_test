@@ -32,7 +32,7 @@ class UsersTableSeeder extends Seeder
         $age = ['10代', '20代', '30代', '40代', '50代', '60代', '70代', '80代', '90代'];
 
         // ランダムにユーザーを作成
-        for ($i = 0; $i < 100; $i++)
+        for ($i = 0; $i < 3; $i++)
         {
             DB::table('users')->insert([
                 'name' => $faker->unique()->userName(),
