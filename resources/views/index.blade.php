@@ -5,7 +5,9 @@
     <div class="row justify-content-center">
         <div class="col-md-10">
             <div class="card">
-                <div class="card-header">トップページ</div>
+                <div class="card-header">トップページ
+                    <a href="/users/{{Auth::id()}}" class="btn btn-sm btn-primary float-right">マイページへ移動</a>
+                </div>
 
                 <div class="card-body">
                     <div class="table-responsive">
