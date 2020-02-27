@@ -28,6 +28,9 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jq-3.3.1/dt-1.10.20/datatables.min.css"/>
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jq-3.3.1/dt-1.10.20/datatables.min.js"></script>
 
+    <!-- lightbox -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.7.1/css/lightbox.css" rel="stylesheet">
+
 </head>
 <body>
     <div id="app">
@@ -67,7 +70,7 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="users/{{ Auth::user()->id }}">
+                                    <a class="dropdown-item" href="/users/{{ Auth::user()->id }}">
                                         {{ __('マイページ') }}
                                     </a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
@@ -93,6 +96,5 @@
     </div>
 
     @yield('script')
-    <script type="text/javascript" src="{{ asset('js/jobImage.js') }}"></script>
 </body>
 </html>

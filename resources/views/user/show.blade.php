@@ -13,11 +13,24 @@
                 <div class="card-body">
                     <div class="up ml-5">
                         @if($user->image)
-                        <img class="image-circle-men" src="/storage/img/{{$user->image}}" alt="トップ画像">
+                            <a href="/storage/img/{{$user->image}}" data-lightbox="top" data-title="トップ画像拡大">
+                                <img class="image-circle-men" src="/storage/img/{{$user->image}}" alt="トップ画像">
+                            </a>
                         @else
-                        <img class="image-circle-men" src="/storage/images/noimage.jpeg" alt="トップ画像">
+                            <a class="image-circle-men" href="/storage/images/noimage.jpeg" data-lightbox="top" data-title="トップ画像拡大">
+                                <img class="image-circle-men" src="/storage/images/noimage.jpeg" alt="トップ画像">
+                            </a>
                         @endif
                     </div>
+                    @if ($errors->any())
+                    <div class="errors mt-1 text-danger">
+                        <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                        </ul>
+                    </div>
+                    @endif
                 </div>
                 <div class="container-fluid" style="margin-top: -0.5rem">
                     <div class="row">
@@ -51,6 +64,14 @@
                         @else
                         <div class="col-3"><img class="" src="/storage/images/job/yoidore_tenshi.gif" alt="アイコン"></div>
                         <div class="col-9 mt-1">無職</div>
+                        @endif
+                    </div>
+                    <div class="row">
+                        <div class="col-3">備考</div>
+                        @if($user->description)
+                        <div class="col-9">{!! nl2br(e($user->description)) !!}</div>
+                        @else
+                        <div class="col-9">なし</div>
                         @endif
                     </div>
                 </div>
@@ -88,7 +109,7 @@
                 </button>
             </div>
             <div class="modal-body">
-            <form action="{{ url('users/'.$user->id) }}" method="post" enctype='multipart/form-data'>
+            <form id="userForm" action="{{ url('users/'.$user->id) }}" method="post" enctype='multipart/form-data'>
                 @csrf
                 @method('PUT')
                 <input type="hidden" name="id" value="{{$user->id}}">
@@ -126,7 +147,7 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="job">JOB</label>
+                        <label for="job">職業</label>
                         <select name="job" class="form-control" id="job">
                             <option value="0" <?php if($user->job === "0") echo "selected"; ?>>無職</option>
                             <option value="1" <?php if($user->job === "1") echo "selected"; ?>>ボクシング</option>
@@ -146,12 +167,18 @@
                             <option value="15" <?php if($user->job === "15") echo "selected"; ?>>その他</option>
                         </select>
                     </div>
+                    <div class="form-group">
+                        <label for="description">備考</label>
+                        <textarea name="description" id="description" type="text" class="form-control" placeholder="平和主義だが理想は高い" cols="10" rows="6">{{ $user->description }}</textarea>
+                    </div>
                     <div class="mb-2">トップ画像</div>
                     <div class="custom-file">
-                        <input name="image" type="file" class="custom-file-input" id="customFile">
-                        <label class="custom-file-label" for="customFile" data-browse="参照">ファイル選択...</label>
+                        <input name="image" type="file" class="custom-file-input" id="userImage">
+                        <label class="custom-file-label" for="userImage" data-browse="参照">ファイル選択...</label>
                     </div>
                     <small class="input_condidion">*jpg,png,gif形式のみ</small></br>
+                    <!-- <img id="img1" style="width:300px;height:300px;" /> -->
+                    <div id="result"></div>
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">閉じる</button>
@@ -167,9 +194,42 @@
 <script>
 jQuery(document).ready(function() {
     // ファイルインプット
-    $('.custom-file-input').on('change',function(){
-    $(this).next('.custom-file-label').html($(this)[0].files[0].name);
-    })
+    $('#userImage').on('change',function(e){
+        $(this).next('.custom-file-label').html($(this)[0].files[0].name);
+
+        //ファイルオブジェクトを取得する
+        var file = e.target.files[0];
+        var reader = new FileReader();
+
+        //画像でない場合は処理終了
+        if(file.type.indexOf("image") < 0){
+        alert("画像ファイルを指定してください。");
+        return false;
+        }
+
+        $('#preview').remove();
+        var file = $(this).prop('files')[0];
+        if(!file.type.match('image.*')){
+            return;
+        }
+        var fileReader = new FileReader();
+        fileReader.onloadend = function() {
+            $('#result').html('<img id="preview" style="max-width:300px;max-height:300px;" src="' + fileReader.result + '"/>');
+        }
+        fileReader.readAsDataURL(file);
+    });
+
 });
 </script>
+<script type="text/javascript" src="{{ asset('js/jobImage.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.7.1/js/lightbox.min.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.min.js"></script>
+<script type='text/javascript' src="/js/jquery.validate.handler.js"></script>
+
+<style type="text/css">
+form.cmxform label.error, label.error {
+    color: red;
+}
+</style>
+
 @endsection

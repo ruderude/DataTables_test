@@ -2,22 +2,30 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Repositories\UserRepository;
+use App\Http\Services\UserService;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\UserRequest;
+
 
 class UserController extends Controller
 {
+    private $services;
+    private $repository;
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct(UserRepository $repository)
+    public function __construct(UserService $services ,UserRepository $repository)
     {
         $this->middleware('auth');
+        $this->services = $services;
         $this->repository = $repository;
     }
 
@@ -61,10 +69,8 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        // dd($id);
         $user = $this->repository->show($id);
         $posts = $this->repository->userPosts($id);
-        // dd($posts);
         return view('user.show', ['user' => $user, 'posts' => $posts]);
     }
 
@@ -86,39 +92,18 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UserRequest $request, $id)
     {
-        // dd($request->image);
         $imageName = null;
+        // 画像があれば保存
         $image = $request->image;
         if($image) {
-            // dd($id);
-            $now = date("Ymd");
-            $num = mt_rand();
-            $end = $image->getClientOriginalExtension();
-            $imageName = $id . $now . $num . "." . $end;
-            // dd($imageName);
-            $image->storeAs('public/img/', $imageName);
+            $imageName = $this->services->fileUpdate($image, $id);
         }
-        // dd($imageName);
 
-        // 元のファイルがあれば削除
-        $oldImageName = null;
-
-        $user = $this->repository->show($id);
-        $user->name = $request->name;
-        $user->sex = $request->sex;
-        $user->age = $request->age;
-        $user->job = $request->job;
-        if(!is_null($imageName)) {
-            $oldImageName = $user->image;
-            $user->image = $imageName;
-            Storage::delete('public/img/' . $oldImageName);
-        }
-        $user->name = $request->name;
-        $user->save();
-
-        return redirect('users/'.$user->id);
+        // 保存
+        $user = $this->repository->update($request, $id, $imageName);
+        return redirect('/users/'.$user->id);
     }
 
     /**

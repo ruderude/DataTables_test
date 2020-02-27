@@ -21,6 +21,7 @@ class UsersTableSeeder extends Seeder
             'job' => null,
             'age' => null,
             'email' => 'test@test.com',
+            'description' => null,
             'password' => bcrypt('111111'),
             'email_verified_at' => $faker->dateTime(),
             'created_at' => $faker->dateTime(),

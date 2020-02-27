@@ -5,6 +5,7 @@ namespace App\Http\Repositories;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Post;
+use Illuminate\Support\Facades\Storage;
 
 class UserRepository {
 
@@ -38,6 +39,28 @@ class UserRepository {
         $posts = Post::where('user_id', $id)->latest()->paginate(5);
         // $posts = Post::where('user_id', $id)->latest()->get();
         return $posts;
+    }
+
+    public function update(Request $request, int $id, $imageName = null)
+    {
+        // 元のファイル
+        $oldImageName = null;
+
+        $user = User::find($id);
+        $user->name = $request->name;
+        $user->sex = $request->sex;
+        $user->age = $request->age;
+        $user->job = $request->job;
+        $user->description = $request->description;
+
+        // 元のファイルがあれば削除
+        if(!is_null($imageName)) {
+            $oldImageName = $user->image;
+            $user->image = $imageName;
+            Storage::delete('public/img/' . $oldImageName);
+        }
+        $user->save();
+        return $user;
     }
 
 }
