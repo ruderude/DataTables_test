@@ -7,7 +7,7 @@
             <div class="card">
                 <div class="card-header">ユーザーページ
                     @if(Auth::id() === $user->id)
-                    <button class="btn btn-primary float-right" data-toggle="modal" data-target="#userModal">編集する</button>
+                    <button class="btn btn-primary float-right" data-toggle="modal" data-target="#userModal">自分を編集する</button>
                     @endif
                 </div>
                 <div class="card-body">
