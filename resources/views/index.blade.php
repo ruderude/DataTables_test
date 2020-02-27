@@ -6,7 +6,9 @@
         <div class="col-md-10">
             <div class="card">
                 <div class="card-header">トップページ
+                @auth
                     <a href="/users/{{Auth::id()}}" class="btn btn-sm btn-primary float-right">マイページへ移動</a>
+                @endauth
                 </div>
 
                 <div class="card-body">
