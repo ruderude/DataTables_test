@@ -77,7 +77,9 @@
                 </div>
                 <div class="mt-3">
                     <div class="alert alert-primary"><strong>記事一覧</strong> - 要チェック！
+                        @if(Auth::id() === $user->id)
                         <a href="/posts" class="myButton float-right" style="margin-top: -6px">投稿する</a>
+                        @endif
                     </div>
                 </div>
                 @foreach($posts as $key => $post)
