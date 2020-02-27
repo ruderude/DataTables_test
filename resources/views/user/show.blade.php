@@ -17,7 +17,7 @@
                                 <img class="image-circle-men" src="/storage/img/{{$user->image}}" alt="トップ画像">
                             </a>
                         @else
-                            <a class="image-circle-men" href="/storage/images/noimage.jpeg" data-lightbox="top" data-title="トップ画像拡大">
+                            <a href="/storage/images/noimage.jpeg" data-lightbox="top" data-title="トップ画像拡大">
                                 <img class="image-circle-men" src="/storage/images/noimage.jpeg" alt="トップ画像">
                             </a>
                         @endif
