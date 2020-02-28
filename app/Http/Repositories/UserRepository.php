@@ -36,7 +36,7 @@ class UserRepository {
     public function userPosts($id)
     {
         // dd($id);
-        $posts = Post::where('user_id', $id)->latest()->paginate(5);
+        $posts = Post::where('user_id', $id)->with('likes')->latest()->paginate(5);
         // $posts = Post::where('user_id', $id)->latest()->get();
         return $posts;
     }

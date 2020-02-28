@@ -87,6 +87,13 @@
                         <h5 class="card-title">{{ $post->title }}</h5>
                         <h6 class="card-subtitle mb-2 text-muted">{{ $post->created_at }}</h6>
                         <p class="card-text">{!! nl2br(e($post->body)) !!}</p>
+                        @if ($post->likedBy(Auth::user())->count() > 0)
+                        <i class="onHeart fas fa-heart text-danger" data-post="{{ $post->id }}"></i><span class="onHeart" data-post="{{ $post->id }}"> {{count($post->likes)}}</span>
+                        <a href="/likes/{{ $post->likedBy(Auth::user())->firstOrFail()->id }}">いいねを取り消す</a>
+                        @else
+                        <i class="offHeart far fa-heart" data-post="{{ $post->id }}"></i><span class="offHeart" data-post="{{ $post->id }}"> {{count($post->likes)}}</span>
+                        <a href="/posts/{{ $post->id }}/likes">いいね</a>
+                        @endif
                     </div>
                 @endforeach
                 <div class="d-flex justify-content-center">
@@ -224,6 +231,29 @@ jQuery(document).ready(function() {
         }
         fileReader.readAsDataURL(file);
     });
+
+    // $('.offHeart').on('click',function(e){
+    //     var $this = $(this);
+    //     var postId = $(this).data('post');
+    //     console.log(postId);
+
+    //     $.ajax({
+    //         type: 'GET',
+    //         url: '/posts/' + postId + '/likes',
+    //         data: { id: postId} //{キー:投稿ID}
+    //     }).done(function(data){
+    //         console.log('Ajax Success');
+    //         console.log(data);
+    //         $this.toggleClass('offHeart');
+    //         $this.toggleClass('onHeart');
+    //         // $this.html(data);
+
+
+    //     }).fail(function(msg) {
+    //         console.log('Ajax Error');
+    //     });
+
+    // });
 
 });
 </script>

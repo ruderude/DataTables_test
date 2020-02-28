@@ -71,6 +71,7 @@ class UserController extends Controller
     {
         $user = $this->repository->show($id);
         $posts = $this->repository->userPosts($id);
+        // dd($posts);
         return view('user.show', ['user' => $user, 'posts' => $posts]);
     }
 

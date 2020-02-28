@@ -54,4 +54,9 @@ class User extends Authenticatable
         // 記事を新しい順で取得する
         return $this->hasMany('App\Models\Post')->latest();
     }
+
+    public function likes()
+    {
+        return $this->hasMany('App\Models\Like');
+    }
 }
