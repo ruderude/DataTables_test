@@ -61,7 +61,7 @@ class PostController extends Controller
         $id = Auth::id();
         $post = $this->repository->store($request, $id);
 
-        return redirect('/users/'.$id);
+        return redirect('/users/'.$id)->with('flash_message', '記事を投稿しました');
     }
 
     /**

@@ -2,19 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use App\Models\Post;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use App\Http\Repositories\UserRepository;
-use App\Http\Services\UserService;
-use Illuminate\Support\Facades\Storage;
-use App\Http\Requests\UserRequest;
+use App\Models\Comment;
+use App\Http\Repositories\CommentRepository;
 
-
-class UserController extends Controller
+class CommentController extends Controller
 {
-    private $services;
+    // private $services;
     private $repository;
 
     /**
@@ -22,13 +16,12 @@ class UserController extends Controller
      *
      * @return void
      */
-    public function __construct(UserService $services ,UserRepository $repository)
+    public function __construct(CommentRepository $repository)
     {
         $this->middleware('auth');
-        $this->services = $services;
+        // $this->services = $services;
         $this->repository = $repository;
     }
-
     /**
      * Display a listing of the resource.
      *
@@ -36,8 +29,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        // $users = $this->repository->index();
-        // return view('index', ['users' => $users]);
+        //
     }
 
     /**
@@ -58,7 +50,15 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
+        try{
+            $this->repository->store($request);
+        }catch(Exception $e){
+            // todo
+            // echo "エラー：" . $e->getMessage();
+        }
+
+        return redirect('/users/'.$request->userId)->with('flash_message', 'コメントを投稿しました');
     }
 
     /**
@@ -69,10 +69,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $user = $this->repository->show($id);
-        $posts = $this->repository->userPostsWithComments($id);
-        // dd($posts);
-        return view('user.show', ['user' => $user, 'posts' => $posts]);
+        //
     }
 
     /**
@@ -93,18 +90,9 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UserRequest $request, $id)
+    public function update(Request $request, $id)
     {
-        $imageName = null;
-        // 画像があれば保存
-        $image = $request->image;
-        if($image) {
-            $imageName = $this->services->fileUpdate($image, $id);
-        }
-
-        // 保存
-        $user = $this->repository->update($request, $id, $imageName);
-        return redirect('/users/'.$user->id);
+        //
     }
 
     /**

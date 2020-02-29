@@ -34,6 +34,11 @@ class Post extends Model
         return $this->hasMany('App\Models\Like');
     }
 
+    public function comments()
+    {
+        return $this->hasMany('App\Models\Comment');
+    }
+
     Public function likedBy($user)
   {
     return Like::where('user_id', $user->id)->where('post_id', $this->id);

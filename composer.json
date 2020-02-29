@@ -12,6 +12,7 @@
         "fideloper/proxy": "^4.0",
         "freshbitsweb/laratables": "^2.1",
         "fzaninotto/faker": "^1.4",
+        "itsgoingd/clockwork": "^4.0",
         "laravel/framework": "5.7.*",
         "laravel/tinker": "^1.0"
     },

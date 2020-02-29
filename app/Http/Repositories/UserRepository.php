@@ -33,10 +33,10 @@ class UserRepository {
         return $user;
     }
 
-    public function userPosts($id)
+    public function userPostsWithComments($id)
     {
         // dd($id);
-        $posts = Post::where('user_id', $id)->with('likes')->latest()->paginate(5);
+        $posts = Post::where('user_id', $id)->with('likes')->with('comments')->latest()->paginate(5);
         // $posts = Post::where('user_id', $id)->latest()->get();
         return $posts;
     }
