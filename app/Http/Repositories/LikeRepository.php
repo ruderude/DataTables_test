@@ -31,11 +31,23 @@ class LikeRepository {
             return $likeCount - 1;
 
         } else {
-            // なければ作成
-            $like = new Like;
-            $like->post_id = $post_id;
-            $like->user_id = $user_id;
-            $like->save();
+            
+            try {
+                \DB::beginTransaction();
+
+                // なければ作成
+                $like = new Like;
+                $like->post_id = $post_id;
+                $like->user_id = $user_id;
+                $like->save();
+
+                \DB::commit();
+
+            } catch (Exception $e) {
+
+                \DB::rollBack();
+                return $e;
+            }
 
             $likeCount = Like::where('post_id', $like->post_id)->count();
             return $likeCount;

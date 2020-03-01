@@ -43,23 +43,35 @@ class UserRepository {
 
     public function update(Request $request, int $id, $imageName = null)
     {
-        // 元のファイル
-        $oldImageName = null;
+        try {
+            \DB::beginTransaction();
 
-        $user = User::find($id);
-        $user->name = $request->name;
-        $user->sex = $request->sex;
-        $user->age = $request->age;
-        $user->job = $request->job;
-        $user->description = $request->description;
+            // 元のファイル
+            $oldImageName = null;
 
-        // 元のファイルがあれば削除
-        if(!is_null($imageName)) {
-            $oldImageName = $user->image;
-            $user->image = $imageName;
-            Storage::delete('public/img/' . $oldImageName);
+            $user = User::find($id);
+            $user->name = $request->name;
+            $user->sex = $request->sex;
+            $user->age = $request->age;
+            $user->job = $request->job;
+            $user->description = $request->description;
+
+            // 元のファイルがあれば削除
+            if(!is_null($imageName)) {
+                $oldImageName = $user->image;
+                $user->image = $imageName;
+                Storage::delete('public/img/' . $oldImageName);
+            }
+            $user->save();
+
+            \DB::commit();
+
+        } catch (Exception $e) {
+
+            \DB::rollBack();
+            return $e;
         }
-        $user->save();
+
         return $user;
     }
 

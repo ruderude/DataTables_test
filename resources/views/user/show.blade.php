@@ -82,19 +82,25 @@
                     </div>
                 </div>
                 <div class="mt-3">
-                    <div class="card-header alert alert-primary"><strong>記事一覧</strong> - 要チェック！
+                    <div class="card-header alert alert-primary"><strong>{{ $user->name }}の記事一覧</strong> - 要チェック！
                         @if(Auth::id() === $user->id)
-                        <a href="/posts" class="myButton float-right" style="margin-top: -6px">投稿する</a>
+                        <a href="/posts/create" class="myButton float-right" style="margin-top: -6px">投稿する</a>
                         @endif
                     </div>
                 </div>
                 @foreach($posts as $key => $post)
                     <div class="card-body">
-                        <h5 class="card-title">{{ $post->title }}</h5>
+                        <div class="clearfix mb-2">
+                            <div class="p-2 float-left"><h4 class="card-title">{{ $post->title }}</h4></div>
+                            @if(Auth::id() === $user->id)
+                                <div title="ゴミ箱" class="deletePost p-1 float-right btn" data-postid="{{ $post->id }}"><i class="fa fa-trash" aria-hidden="true"></i></div>
+                                <div title="編集" class="editPost p-1 mr-2 float-right btn" data-postid="{{ $post->id }}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></div>
+                            @endif
+                        </div>
                         <h6 class="card-subtitle mb-2 text-muted">{{ $post->created_at }}</h6>
                         <p class="card-text">{!! nl2br(e($post->body)) !!}</p>
                         <span class="commentModal pointer" data-post="{{ $post->id }}" data-toggle="modal" data-target="#commentModal{{$key}}">
-                        <i class="far fa-comment"></i><span class="texts">コメントする</span>
+                        <i class="fa fa-comment-o" aria-hidden="true"></i><span class="texts">コメントする</span>
                         </span>
                         @component('user.commentModal')
                             @slot('modalKey', $key)
@@ -103,11 +109,11 @@
                         @endcomponent
                         @if ($post->likedBy(Auth::user())->count() > 0)
                         <span class="like pointer" data-post="{{ $post->id }}">
-                            <i class="fas fa-heart text-danger"></i><span class="count"> {{count($post->likes)}}</span><span class="texts text-info">いいねを取り消す</span>
+                        <i class="fa fa-heart text-danger mr-1" aria-hidden="true"></i><span class="count">{{count($post->likes)}}</span><span class="texts text-info">いいねを取り消す</span>
                         </span>
                         @else
                         <span class="like pointer" data-post="{{ $post->id }}">
-                            <i class="far fa-heart text-danger"></i><span class="count"> {{count($post->likes)}}</span><span class="texts text-info">いいねする</span>
+                        <i class="fa fa-heart-o text-danger mr-1" aria-hidden="true"></i><span class="count">{{count($post->likes)}}</span><span class="texts text-info">いいねする</span>
                         </span>
                         @endif
 
@@ -120,7 +126,11 @@
                                             <tr>
                                                 <td>
                                                     <div>
+                                                        @if($comment->user->image)
                                                         <img src="/storage/img/{{ $comment->user->image }}" alt="自分のチャット画像です。" class="image-circle-min">
+                                                        @else
+                                                        <img src="/storage/images/noimage.jpeg" alt="自分のチャット画像です。" class="image-circle-min">
+                                                        @endif
                                                         <div class="text-center">{{ $comment->user->name }}</div>
                                                     </div>
                                                 </td>
@@ -128,6 +138,9 @@
                                                     <div class="arrow_box text-wrap">
                                                     {{ $comment->body }}
                                                     </div>
+                                                    @if(Auth::id() === $comment->user->id)
+                                                    <div title="ゴミ箱" class="deleteComment p-1 float-right btn" data-commentid="{{ $comment->id }}"><i class="fa fa-trash" aria-hidden="true"></i></div>
+                                                    @endif
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -204,8 +217,8 @@ jQuery(document).ready(function() {
             // console.log('Ajax Success');
             // console.log(data);
             // いいねの総数を表示
-            $this.children('i').toggleClass('far');
-            $this.children('i').toggleClass('fas');
+            $this.children('i').toggleClass('fa-heart-o');
+            $this.children('i').toggleClass('fa-heart');
             $this.children('.count').html(data);
             if($this.children('.texts').html() === 'いいねする'){
                 $this.children('.texts').html('いいねを取り消す');
@@ -222,7 +235,7 @@ jQuery(document).ready(function() {
     });
 
     // コメント投稿
-    $('.comment').on('click',function(e){
+    $('.comment').on('click',function(){
         event.preventDefault();
         var $this = $(this);
         var post_id = $(this).data('post');
@@ -235,28 +248,137 @@ jQuery(document).ready(function() {
             $('.errorCode').text('空文字は禁止です');
             return false;
         } else if (comment.length > 120) {
-            $('.errorCode').text('120文字以内でお願いします');
+            $('.errorCode').text('コメントは120文字以内でお願いします');
             return false;
         }
 
-        $.ajax({
-            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-            type: 'POST',
-            url: '/comments',
-            data: {
-                user_id: authId,
-                post_id: post_id,
-                body: comment,
-            },
-        }).done(function(data){
-            console.log('Ajax Success');
-            window.location.reload();
+        $('#commentForm' + post_id).on('click', function(){
+            // event.preventDefault();
+            swal({
+                title: "コメント送信",
+                text: "投稿しますか？",
+                icon: "warning",
+                buttons: true,
+            })
+                .then((willCreate) => {
+                    if (willCreate) {
+                        // $('#commentForm' + post_id).submit();
+                        $.ajax({
+                            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                            type: 'POST',
+                            url: '/comments',
+                            data: {
+                                user_id: authId,
+                                post_id: post_id,
+                                body: comment,
+                            },
+                        }).done(function(data){
+                            console.log('Ajax Success');
+                            window.location.reload();
 
-        }).fail(function(msg) {
-            console.log('Ajax Error');
+                        }).fail(function(msg) {
+                            console.log('Ajax Error');
+                            swal({
+                                title: "Ajaxエラー",
+                                text: "送信に失敗しました",
+                                icon: "warning",
+                            });
+                        });
+                        flag = 1;
+                        setTimeout(function(){ flag = 0;}, 500);
+                    }
+                });
+
         });
-        flag = 1;
-        setTimeout(function(){ flag = 0;}, 500);
+
+
+    });
+
+    // 投稿編集
+    $(".editPost").on("click", function() {
+        var post_id = $(this).data('postid');
+        // console.log(post_id)
+        location.href= "/posts/" + post_id + "/edit";
+    });
+
+    // 投稿削除
+    $(".deletePost").on("click", function() {
+        var post_id = $(this).data('postid');
+        // console.log(post_id)
+        swal({
+                title: "投稿削除",
+                text: "削除しますか？",
+                icon: "warning",
+                buttons: true,
+            })
+                .then((willCreate) => {
+                    if (willCreate) {
+                        // $('#commentForm' + post_id).submit();
+                        $.ajax({
+                            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                            type: 'POST',
+                            url: '/posts/' + post_id,
+                            data: {
+                                post_id: post_id,
+                                _method: 'DELETE',
+                            },
+                        }).done(function(data){
+                            console.log('Ajax Success');
+                            window.location.reload();
+
+                        }).fail(function(msg) {
+                            console.log('Ajax Error');
+                            swal({
+                                title: "Ajaxエラー",
+                                text: "送信に失敗しました",
+                                icon: "warning",
+                            });
+                        });
+                        flag = 1;
+                        setTimeout(function(){ flag = 0;}, 500);
+                    }
+                });
+
+    });
+
+    // コメント削除
+    $(".deleteComment").on("click", function() {
+        var comment_id = $(this).data('commentid');
+        // console.log(comment_id)
+        swal({
+                title: "コメント削除",
+                text: "コメントを削除しますか？",
+                icon: "warning",
+                buttons: true,
+            })
+                .then((willCreate) => {
+                    if (willCreate) {
+                        // $('#commentForm' + post_id).submit();
+                        $.ajax({
+                            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                            type: 'POST',
+                            url: '/comments/' + comment_id,
+                            data: {
+                                comment_id: comment_id,
+                                _method: 'DELETE',
+                            },
+                        }).done(function(data){
+                            console.log('Ajax Success');
+                            // console.log(data);
+                            window.location.reload();
+
+                        }).fail(function(msg) {
+                            console.log('Ajax Error');
+                            swal({
+                                title: "Ajaxエラー",
+                                text: "送信に失敗しました",
+                                icon: "warning",
+                            });
+                        });
+                        flag = 1;
+                        setTimeout(function(){ flag = 0;}, 500);
+                    }
+                });
 
     });
 

@@ -19,8 +19,8 @@ Route::get('/', 'HomeController@index')->name('home');
 // Route::get('/users', 'UserController@index')->name('users.index');
 
 Route::resource('/users', 'UserController', ['only' => ['index', 'show', 'edit', 'update', 'destroy']]);
-Route::resource('/posts', 'PostController', ['only' => ['index', 'store', 'edit', 'update', 'destroy']]);
-Route::resource('/comments', 'CommentController', ['only' => 'store']);
+Route::resource('/posts', 'PostController', ['only' => ['create', 'store', 'edit', 'update', 'destroy']]);
+Route::resource('/comments', 'CommentController', ['only' => ['store', 'destroy']]);
 
 //いいね処理
 Route::post('/likes', 'LikesController@likes');

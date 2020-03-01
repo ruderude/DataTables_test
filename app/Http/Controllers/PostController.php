@@ -46,7 +46,9 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        $user = Auth::user();
+        // dd($user);
+        return view('post.create', ['user' => $user]);
     }
 
     /**
@@ -83,7 +85,9 @@ class PostController extends Controller
      */
     public function edit($id)
     {
-        //
+        $user = Auth::user();
+        $post = $this->repository->fetchPost($id);
+        return view('post.edit', ['user' => $user, 'post' => $post]);
     }
 
     /**
@@ -95,7 +99,9 @@ class PostController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // dd($request);
+        $post = $this->repository->update($request, $id);
+        return redirect('/users/'. Auth::id())->with('flash_message', '記事を更新しました');
     }
 
     /**
@@ -106,6 +112,6 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $post = Post::find($id)->delete();
     }
 }
