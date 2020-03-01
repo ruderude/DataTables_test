@@ -17,5 +17,6 @@ class CommentRepository {
         $comment->post_id = $request->postId;
         $comment->body = $request->comment;
         $comment->save();
+
     }
 }

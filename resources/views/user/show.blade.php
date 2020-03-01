@@ -93,7 +93,7 @@
                         <h5 class="card-title">{{ $post->title }}</h5>
                         <h6 class="card-subtitle mb-2 text-muted">{{ $post->created_at }}</h6>
                         <p class="card-text">{!! nl2br(e($post->body)) !!}</p>
-                        <span class="comment pointer" data-post="{{ $post->id }}" data-toggle="modal" data-target="#commentModal{{$key}}">
+                        <span class="commentModal pointer" data-post="{{ $post->id }}" data-toggle="modal" data-target="#commentModal{{$key}}">
                         <i class="far fa-comment"></i><span class="texts">コメントする</span>
                         </span>
                         @component('user.commentModal')
@@ -115,16 +115,38 @@
                             @foreach($post->comments as $comment)
                                 @if($comment->post_id === $post->id)
                                     <!-- コメントの吹き出し -->
-                                    <div class="d-flex flex-row mb-2">
-                                        <div class="chat-face">
-                                            <img src="/storage/img/{{ $comment->user->image }}" alt="自分のチャット画像です。" width="60" height="60">
-                                        </div>
-                                        <div class="chat-area">
-                                            <div class="chat-hukidashi">
-                                            {{ $comment->body }}
+                                    <!-- <div class="d-flex">
+                                        <div class="p-2">
+                                            <div class="chat-face">
+                                                <img src="/storage/img/{{ $comment->user->image }}" alt="自分のチャット画像です。" width="60" height="60">
+                                                <div class="text-center small">{{ $comment->user->name }}</div>
                                             </div>
                                         </div>
-                                    </div>
+                                        <div class="p-2 flex-grow-1">
+                                            <div class="chat-area">
+                                                <div class="chat-hukidashi small">
+                                                {{ $comment->body }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div> -->
+                                    <table class="table table-responsive">
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <div class="chat-face">
+                                                        <img src="/storage/img/{{ $comment->user->image }}" alt="自分のチャット画像です。" width="60" height="60">
+                                                        <div class="text-center">{{ $comment->user->name }}</div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="arrow_box text-wrap">
+                                                    {{ $comment->body }}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 @endif
                             @endforeach
                         @endif
@@ -192,6 +214,7 @@ jQuery(document).ready(function() {
             type: 'POST',
             url: '/likes',
             data: { id: postId },
+            timeout: 10000,
         }).done(function(data){
             // console.log('Ajax Success');
             // console.log(data);
@@ -213,6 +236,45 @@ jQuery(document).ready(function() {
 
     });
 
+    // コメント投稿
+    $('.comment').on('click',function(e){
+        event.preventDefault();
+        var $this = $(this);
+        var post_id = $(this).data('post');
+        var modal = $(this).data('modal');
+        var authId = $(this).data('auth');
+        var comment = $('#comment' + post_id).val();
+        // console.log(modal);
+        // 簡易的なバリデーション
+        if (comment === null || comment === "") {
+            $('.errorCode').text('空文字は禁止です');
+            return false;
+        } else if (comment.length > 120) {
+            $('.errorCode').text('120文字以内でお願いします');
+            return false;
+        }
+
+        $.ajax({
+            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+            type: 'POST',
+            url: '/comments',
+            data: {
+                user_id: authId,
+                post_id: post_id,
+                body: comment,
+            },
+        }).done(function(data){
+            console.log('Ajax Success');
+            window.location.reload();
+
+        }).fail(function(msg) {
+            console.log('Ajax Error');
+        });
+        flag = 1;
+        setTimeout(function(){ flag = 0;}, 500);
+
+    });
+
 });
 </script>
 <script type="text/javascript" src="{{ asset('js/jobImage.js') }}"></script>
@@ -224,37 +286,51 @@ jQuery(document).ready(function() {
 form.cmxform label.error, label.error {
     color: red;
 }
+table {
+  table-layout: fixed;
+  word-break: break-all;
+  word-wrap: break-word;
+}
 /* チャットレイアウト */
 .chat-face img{
     border-radius: 50%;
     border: 1px solid #ccc;
     box-shadow: 0 0 4px #ddd;
 }
-.chat-area {
-    width: 100%;
+
+.arrow_box{
+    box-sizing:border-box;
+    position:relative;
+    width:100%;
+    height:100%;
+    background:#b9ffa1;
+    padding:20px;
+    text-align:left;
+    color:#333333;
+    font-size:14px;
+    font-weight:bold;
+    border-radius:15px;
+    -webkit-border-radius:15px;
+    -moz-border-radius:15px;
 }
-.chat-hukidashi {
-    display: inline-block; /*コメントの文字数に合わせて可変*/
-    padding: 15px 20px;
-    margin-left: 20px;
-    margin-top: 8px;
-    /* border: 1px solid gray; ←削除 */
-    border-radius: 10px;
-    position: relative; /*追記*/
-    background-color: #D9F0FF; /*追記*/
-}
-/* ↓追記↓ */
-.chat-hukidashi:after {
-    content: "";
-    position: absolute;
-    top: 50%; left: -10px;
+.arrow_box:after{
+    border: solid transparent;
+    content:'';
+    height:0;
+    width:0;
+    pointer-events:none;
+    position:absolute;
+    border-color: rgba(90, 230, 40, 0);
+    border-top-width:10px;
+    border-bottom-width:10px;
+    border-left-width:20px;
+    border-right-width:20px;
     margin-top: -10px;
-    display: block;
-    width: 0px;
-    height: 0px;
-    border-style: solid;
-    border-width: 10px 10px 10px 0;
-    border-color: transparent #D9F0FF transparent transparent;
+    border-right-color:#b9ffa1;
+    right:100%;
+    top:50%;
+}
+
 </style>
 
 @endsection

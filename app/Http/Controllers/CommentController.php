@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Comment;
 use App\Http\Repositories\CommentRepository;
+use App\Http\Requests\CommentRequest;
 
 class CommentController extends Controller
 {
@@ -48,17 +49,26 @@ class CommentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CommentRequest $request)
     {
-        
-        try{
-            $this->repository->store($request);
-        }catch(Exception $e){
-            // todo
-            // echo "エラー：" . $e->getMessage();
-        }
+        $data = $request->all();
 
-        return redirect('/users/'.$request->userId)->with('flash_message', 'コメントを投稿しました');
+        $comment = new Comment;
+        $comment->user_id = $data['user_id'];
+        $comment->post_id = $data['post_id'];
+        $comment->body = $data['body'];
+        $comment->save();
+
+        return "OK";
+
+        // try{
+        //     $this->repository->store($request);
+        // }catch(Exception $e){
+        //     // todo
+        //     // echo "エラー：" . $e->getMessage();
+        // }
+
+        // return redirect('/users/'.$request->userId)->with('flash_message', 'コメントを投稿しました');
     }
 
     /**

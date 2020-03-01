@@ -9,20 +9,29 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="commentForm" action="{{ url('comments') }}" method="post">
+                @if ($errors->any())
+                    <div class="errors mt-1 text-danger">
+                        <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                        </ul>
+                    </div>
+                @endif
+                <form id="commentForm{{ $postId }}" action="{{ url('comments') }}" method="post">
                     @csrf
                     <input type="hidden" name="myId" value="{{ Auth::id() }}">
-                    <input type="hidden" name="userId" value="{{ $userId }}">
                     <input type="hidden" name="postId" value="{{ $postId }}">
-                        <div class="form-group">
-                            <label for="comment">コメント（200文字まで）：</label>
-                            <textarea name="comment" id="comment" type="text" class="form-control" placeholder="物申す！" cols="10" rows="6"></textarea>
-                        </div>
+                    <div class="form-group">
+                        <label for="comment{{ $postId }}">コメント（120文字まで）：<span class="errorCode text-danger"></span></label>
+                        <textarea name="comment" id="comment{{ $postId }}" type="text" class="form-control" placeholder="物申す！" cols="10" rows="6"></textarea>
+                    </div>
 
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">閉じる</button>
-                            <input type="submit" name="submit" class="btn btn-success" value="コメント送信">
-                        </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">閉じる</button>
+                        <button type="submit" class="comment btn btn-success" data-auth="{{ Auth::id() }}" data-user="{{ $userId }}" data-post="{{ $postId }}" data-modal="commentModal{{ $modalKey }}">コメント送信</button>
+                        <!-- <input type="submit" name="submit" class="btn btn-success" value="コメント送信"> -->
+                    </div>
                 </form>
             </div>
         </div><!-- /.modal-content -->
