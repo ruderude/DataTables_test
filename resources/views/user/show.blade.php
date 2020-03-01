@@ -91,7 +91,7 @@
                 @foreach($posts as $key => $post)
                     <div class="card-body">
                         <div class="clearfix mb-2">
-                            <div class="p-2 float-left"><h4 class="card-title">{{ $post->title }}</h4></div>
+                            <div class="p-2 float-left"><h4 class="card-title postTitle">{{ $post->title }}</h4></div>
                             @if(Auth::id() === $user->id)
                                 <div title="ゴミ箱" class="deletePost p-1 float-right btn" data-postid="{{ $post->id }}"><i class="fa fa-trash" aria-hidden="true"></i></div>
                                 <div title="編集" class="editPost p-1 mr-2 float-right btn" data-postid="{{ $post->id }}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></div>
@@ -256,7 +256,7 @@ jQuery(document).ready(function() {
             // event.preventDefault();
             swal({
                 title: "コメント送信",
-                text: "投稿しますか？",
+                text: "コメントを投稿しますか？",
                 icon: "warning",
                 buttons: true,
             })
@@ -274,7 +274,12 @@ jQuery(document).ready(function() {
                             },
                         }).done(function(data){
                             console.log('Ajax Success');
-                            window.location.reload();
+                            swal({
+                                title: "コメント登録！",
+                                text: "ありがとうございました",
+                                icon: "success",
+                                buttons: false,
+                            })
 
                         }).fail(function(msg) {
                             console.log('Ajax Error');
@@ -287,6 +292,11 @@ jQuery(document).ready(function() {
                         flag = 1;
                         setTimeout(function(){ flag = 0;}, 500);
                     }
+                }).then(() => {
+                    setTimeout(function(){
+                        window.location.reload();
+                    },1000);
+
                 });
 
         });
@@ -324,7 +334,12 @@ jQuery(document).ready(function() {
                             },
                         }).done(function(data){
                             console.log('Ajax Success');
-                            window.location.reload();
+                            swal({
+                                title: "投稿削除",
+                                text: "投稿を削除しました",
+                                icon: "success",
+                                buttons: false,
+                            })
 
                         }).fail(function(msg) {
                             console.log('Ajax Error');
@@ -337,6 +352,11 @@ jQuery(document).ready(function() {
                         flag = 1;
                         setTimeout(function(){ flag = 0;}, 500);
                     }
+                }).then(() => {
+                    setTimeout(function(){
+                        window.location.reload();
+                    },1000);
+
                 });
 
     });
@@ -365,7 +385,12 @@ jQuery(document).ready(function() {
                         }).done(function(data){
                             console.log('Ajax Success');
                             // console.log(data);
-                            window.location.reload();
+                            swal({
+                                title: "コメント削除",
+                                text: "コメントを削除しました",
+                                icon: "success",
+                                buttons: false,
+                            })
 
                         }).fail(function(msg) {
                             console.log('Ajax Error');
@@ -378,6 +403,11 @@ jQuery(document).ready(function() {
                         flag = 1;
                         setTimeout(function(){ flag = 0;}, 500);
                     }
+                }).then(() => {
+                    setTimeout(function(){
+                        window.location.reload();
+                    },1000);
+
                 });
 
     });
@@ -430,6 +460,14 @@ table {
     border-right-color:#b9ffa1;
     right:100%;
     top:50%;
+}
+
+/* 見出し */
+.postTitle {
+  background: #dfefff;
+  box-shadow: 0px 0px 0px 5px #dfefff;
+  border: dashed 2px white;
+  padding: 0.2em 0.5em;
 }
 
 </style>

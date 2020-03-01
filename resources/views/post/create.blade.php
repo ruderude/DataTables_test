@@ -29,7 +29,7 @@
                             <label for="body" class="mr-2">投稿本文</label><span class="errorBody text-danger"></span>
                             <textarea name="body" id="body" type="text" class="form-control" placeholder="カタツムリに塩をかけてみました・・・" cols="10" rows="6"></textarea>
                         </div>
-                        <input id="create" type="submit" name="submit" class="btn btn-success float-right" value="投稿する">
+                        <input id="create" type="submit" name="create" class="btn btn-success float-right" value="投稿する">
                     </form>
                 </div>
             </div>
