@@ -8,6 +8,9 @@
                 <div class="card-header">{{ __('ログイン') }}</div>
 
                 <div class="card-body">
+                    <div class="text-info">ログインして見るだけなら、</div>
+                    <div class="font-weight-bold">メールアドレス：test@test.com </div>
+                    <div class="font-weight-bold">パスワード：111111</div>
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
 
