@@ -115,27 +115,12 @@
                             @foreach($post->comments as $comment)
                                 @if($comment->post_id === $post->id)
                                     <!-- コメントの吹き出し -->
-                                    <!-- <div class="d-flex">
-                                        <div class="p-2">
-                                            <div class="chat-face">
-                                                <img src="/storage/img/{{ $comment->user->image }}" alt="自分のチャット画像です。" width="60" height="60">
-                                                <div class="text-center small">{{ $comment->user->name }}</div>
-                                            </div>
-                                        </div>
-                                        <div class="p-2 flex-grow-1">
-                                            <div class="chat-area">
-                                                <div class="chat-hukidashi small">
-                                                {{ $comment->body }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div> -->
                                     <table class="table table-responsive">
                                         <tbody>
                                             <tr>
                                                 <td>
-                                                    <div class="chat-face">
-                                                        <img src="/storage/img/{{ $comment->user->image }}" alt="自分のチャット画像です。" width="60" height="60">
+                                                    <div>
+                                                        <img src="/storage/img/{{ $comment->user->image }}" alt="自分のチャット画像です。" class="image-circle-min">
                                                         <div class="text-center">{{ $comment->user->name }}</div>
                                                     </div>
                                                 </td>
@@ -292,12 +277,6 @@ table {
   word-wrap: break-word;
 }
 /* チャットレイアウト */
-.chat-face img{
-    border-radius: 50%;
-    border: 1px solid #ccc;
-    box-shadow: 0 0 4px #ddd;
-}
-
 .arrow_box{
     box-sizing:border-box;
     position:relative;
